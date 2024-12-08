@@ -7,7 +7,7 @@ class Character {
   late String image;
   late List<String> episodes;
   late String url;
-  Character.fromjson(Map<String, dynamic> json) {
+  Character.fromJson(Map<String, dynamic> json) {
     charId = json["id"];
     name = json["name"];
     islive = json["status"];
