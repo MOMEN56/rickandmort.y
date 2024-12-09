@@ -3,9 +3,12 @@ import 'package:rickandmorty/data/web_services/character_web_services.dart';
 
 class CharactersRepository {
   final CharacterWebServices characterWebServices;
+
+  // Constructor
   CharactersRepository(this.characterWebServices);
+
+  // لا حاجة لتحويل البيانات مرة أخرى لأن getAllCharacters في CharacterWebServices ترجع قائمة من Character
   Future<List<Character>> getAllCharacters() async {
-    final characters = await characterWebServices.getAllCharacters();
-    return characters.map((character) => Character.fromJson(character)).toList();
+    return await characterWebServices.getAllCharacters();
   }
 }

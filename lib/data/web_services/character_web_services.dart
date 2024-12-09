@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:rickandmorty/constants/strings.dart';
+import 'package:rickandmorty/data/models/characters.dart';  // افترض أنك تستخدم نموذج Character هنا
 
 class CharacterWebServices {
   late Dio dio;
@@ -12,11 +13,14 @@ class CharacterWebServices {
     );
     dio = Dio(options);
   }
-  Future<List<dynamic>> getAllCharacters() async {
+
+  Future<List<Character>> getAllCharacters() async {
     try {
       Response response = await dio.get("character");
       print(response.data.toString());
-      return response.data;
+
+      List<dynamic> results = response.data['results'];  // استخراج النتائج من الـ response
+      return results.map((item) => Character.fromJson(item)).toList();
     } on Exception catch (e) {
       print(e.toString());
       return [];
