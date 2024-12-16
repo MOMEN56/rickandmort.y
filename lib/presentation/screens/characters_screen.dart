@@ -111,8 +111,12 @@ class _CharactersScreenState extends State<CharactersScreen> {
         title: _isSearching ? _buildSearchField() : _buildAppbarTitle(),
         actions: _buildAppbarActions(),
       ),
-      body: buildBlocWidget(),
-    );
+ body: Container(
+      width: double.infinity,  // Makes the container take the full width
+      height: double.infinity, // Makes the container take the full height
+      color: MyColors.myGrey,
+      child: buildBlocWidget(),
+    ),    );
   }
 
   Widget buildBlocWidget() {
@@ -123,7 +127,9 @@ class _CharactersScreenState extends State<CharactersScreen> {
           allCharacters = state.character;
           return BuildLoadedListWidget(characters: allCharacters);
         } else {
-          return showLoadingIndicator();
+          return Container(
+          color: Colors.white,
+          child: showLoadingIndicator());
         }
       },
     );

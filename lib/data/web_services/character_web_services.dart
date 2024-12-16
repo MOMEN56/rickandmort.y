@@ -1,29 +1,42 @@
 import 'package:dio/dio.dart';
 import 'package:rickandmorty/constants/strings.dart';
-import 'package:rickandmorty/data/models/characters.dart';  // افترض أنك تستخدم نموذج Character هنا
+import 'package:rickandmorty/data/models/characters.dart';
 
 class CharacterWebServices {
   late Dio dio;
+
   CharacterWebServices() {
     BaseOptions options = BaseOptions(
       baseUrl: baseUrl,
       receiveDataWhenStatusError: true,
-      connectTimeout: const Duration(seconds: 20),
-      receiveTimeout: const Duration(seconds: 20),
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
     );
     dio = Dio(options);
   }
 
-  Future<List<Character>> getAllCharacters() async {
-    try {
-      Response response = await dio.get("character");
-      print(response.data.toString());
+  Future<List<Character>> getFirstTenPagesCharacters() async {
+    List<Character> allCharacters = []; // قائمة لجميع الشخصيات
+    String url = "character"; // بداية الرابط
+    int pageCount = 0; // عداد الصفحات
 
-      List<dynamic> results = response.data['results'];  // استخراج النتائج من الـ response
-      return results.map((item) => Character.fromJson(item)).toList();
+    try {
+      while (url.isNotEmpty && pageCount < 20) { // التكرار حتى 10 صفحات كحد أقصى
+        Response response = await dio.get(url); // طلب الصفحة الحالية
+        print(response.data.toString());
+
+        // إضافة الشخصيات من الصفحة الحالية إلى القائمة
+        List<dynamic> results = response.data['results'];
+        allCharacters.addAll(results.map((item) => Character.fromJson(item)).toList());
+
+        // تحديث الرابط للصفحة التالية
+        url = response.data['info']['next']?.replaceFirst(baseUrl, "") ?? "";
+        pageCount++; // زيادة عداد الصفحات
+      }
     } on Exception catch (e) {
       print(e.toString());
-      return [];
     }
+
+    return allCharacters; // إعادة القائمة النهائية
   }
 }

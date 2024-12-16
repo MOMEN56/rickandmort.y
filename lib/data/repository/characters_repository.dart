@@ -7,8 +7,8 @@ class CharactersRepository {
   // Constructor
   CharactersRepository(this.characterWebServices);
 
-  // لا حاجة لتحويل البيانات مرة أخرى لأن getAllCharacters في CharacterWebServices ترجع قائمة من Character
+  // استدعاء الطريقة الصحيحة من CharacterWebServices
   Future<List<Character>> getAllCharacters() async {
-    return await characterWebServices.getAllCharacters();
+    return await characterWebServices.getFirstTenPagesCharacters(); // استدعاء الطريقة الصحيحة
   }
 }
