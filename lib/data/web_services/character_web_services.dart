@@ -9,8 +9,8 @@ class CharacterWebServices {
     BaseOptions options = BaseOptions(
       baseUrl: baseUrl,
       receiveDataWhenStatusError: true,
-      connectTimeout: const Duration(seconds: 60),
-      receiveTimeout: const Duration(seconds: 60),
+      //connectTimeout: const Duration(seconds: 60),
+      //receiveTimeout: const Duration(seconds: 60),
     );
     dio = Dio(options);
   }

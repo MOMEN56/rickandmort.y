@@ -7,17 +7,19 @@ class Character {
   late String image;
   late List<String> episodes;
   late String url;
-
-  // Constructor to parse JSON
+  late String origin;
+  late String location;
   Character.fromJson(Map<String, dynamic> json) {
-    charId = json["id"].toString(); // تحويل id إلى String إذا كان العدد
+    charId = json["id"].toString();
     name = json["name"];
-    islive = json["status"];  // يمكنك تحسينها إذا أردت تحويلها إلى boolean
+    islive = json["status"];
     species = json["species"];
-    gender = json["gender"];  // تأكد من وجود هذا الحقل إذا كان من الضروري
+    gender = json["gender"];
     image = json["image"];
-    // التأكد من أن episodes هي قائمة من String
+    location = json["location"]["name"];
+    origin = json["origin"]["name"];
     episodes = List<String>.from(json["episode"] ?? []);
     url = json["url"];
   }
 }
+
