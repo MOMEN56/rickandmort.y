@@ -31,5 +31,6 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (_) => CharacterDetailsScreen(character: character,));
     }
+    return null;
   }
 }

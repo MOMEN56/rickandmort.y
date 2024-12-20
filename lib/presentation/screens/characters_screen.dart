@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:rickandmorty/business_logic/cubit/characters_cubit.dart';
 import 'package:rickandmorty/constants/my_colors.dart';
 import 'package:rickandmorty/data/models/characters.dart';
 import 'package:rickandmorty/presentation/widgets/character_item.dart';
 
 class CharactersScreen extends StatefulWidget {
-  const CharactersScreen({Key? key}) : super(key: key);
+  const CharactersScreen({super.key});
 
   @override
   _CharactersScreenState createState() => _CharactersScreenState();
@@ -42,8 +43,9 @@ class _CharactersScreenState extends State<CharactersScreen> {
 
   void addSearchedForItemsToSearchedList(String searchedCharacter) {
     searchedForCharacters = allCharacters
-        .where((character) =>
-            character.name.toLowerCase().startsWith(searchedCharacter.toLowerCase()))
+        .where((character) => character.name
+            .toLowerCase()
+            .startsWith(searchedCharacter.toLowerCase()))
         .toList();
     setState(() {});
   }
@@ -111,25 +113,42 @@ class _CharactersScreenState extends State<CharactersScreen> {
         title: _isSearching ? _buildSearchField() : _buildAppbarTitle(),
         actions: _buildAppbarActions(),
       ),
- body: Container(
-      width: double.infinity,  // Makes the container take the full width
-      height: double.infinity, // Makes the container take the full height
-      color: MyColors.myGrey,
-      child: buildBlocWidget(),
-    ),    );
+      body: OfflineBuilder(
+        connectivityBuilder: (
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          if (connected) {
+            return Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: MyColors.myGrey,
+              child: buildBlocWidget(),
+            );
+          } else {
+            return buildNoInternetWidget();
+          }
+        },
+        child: Container(
+          color: Colors.white,
+          child: const Center(
+            child: Text('Default Widget'),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget buildBlocWidget() {
     return BlocBuilder<CharactersCubit, CharactersState>(
       builder: (context, state) {
         if (state is CharactersLoaded) {
-           
           allCharacters = state.character;
           return BuildLoadedListWidget(characters: allCharacters);
         } else {
-          return Container(
-          color: Colors.white,
-          child: showLoadingIndicator());
+          return Container(color: Colors.white, child: showLoadingIndicator());
         }
       },
     );
@@ -162,9 +181,8 @@ class _CharactersScreenState extends State<CharactersScreen> {
       );
     }
 
-    final charactersToDisplay = _searchTextController.text.isEmpty
-        ? characters
-        : searchedForCharacters;
+    final charactersToDisplay =
+        _searchTextController.text.isEmpty ? characters : searchedForCharacters;
 
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -180,6 +198,29 @@ class _CharactersScreenState extends State<CharactersScreen> {
       itemBuilder: (ctx, index) {
         return CharacterItem(character: charactersToDisplay[index]);
       },
+    );
+  }
+
+  Widget buildNoInternetWidget() {
+    return Center(
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+             /*Text(
+              "Not connected...try again",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+                color: MyColors.myGrey,
+              ),
+            ),*/
+            Image.asset("assets/images/notconnected.png"),
+          ],
+        ),
+      ),
     );
   }
 }

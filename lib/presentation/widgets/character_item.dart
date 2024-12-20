@@ -16,7 +16,7 @@ class CharacterItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: MyColors.myWhite,  // الخلفية بيضاء
         borderRadius: BorderRadius.circular(8),  // حواف دائرية
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.yellow,  // لون الظل (نصف شفاف)
             blurRadius: 16,  // تأثير التمويه (الضبابية)
@@ -27,6 +27,24 @@ class CharacterItem extends StatelessWidget {
       child: InkWell(
         onTap: () => Navigator.pushNamed(context, characterDetailsScreen,arguments: character),
         child: GridTile(
+          footer: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            color: Colors.black54,  // خلفية داكنة للنص
+            alignment: Alignment.bottomCenter,  // محاذاة النص في الأسفل
+            child: Text(
+              character.name,  // اسم الشخصية
+              style: const TextStyle(
+                height: 1.3,
+                fontSize: 16,
+                color: MyColors.myWhite,  // لون النص أبيض
+                fontWeight: FontWeight.bold,  // جعل النص عريض
+              ),
+              overflow: TextOverflow.ellipsis,  // إضافة ثلاث نقاط عند تجاوز النص
+              maxLines: 2,  // الحد الأقصى لعدد الأسطر
+              textAlign: TextAlign.center,  // محاذاة النص في المنتصف
+            ),
+          ),
           child: Hero(
             tag: character.charId,
             child: Container(
@@ -40,24 +58,6 @@ class CharacterItem extends StatelessWidget {
                       fit: BoxFit.cover,  // تغطية المساحة بالكامل
                     )
                   : Image.asset("assets/images/avatar.webp"),  // صورة بديلة في حال عدم وجود صورة
-            ),
-          ),
-          footer: Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            color: Colors.black54,  // خلفية داكنة للنص
-            alignment: Alignment.bottomCenter,  // محاذاة النص في الأسفل
-            child: Text(
-              "${character.name}",  // اسم الشخصية
-              style: TextStyle(
-                height: 1.3,
-                fontSize: 16,
-                color: MyColors.myWhite,  // لون النص أبيض
-                fontWeight: FontWeight.bold,  // جعل النص عريض
-              ),
-              overflow: TextOverflow.ellipsis,  // إضافة ثلاث نقاط عند تجاوز النص
-              maxLines: 2,  // الحد الأقصى لعدد الأسطر
-              textAlign: TextAlign.center,  // محاذاة النص في المنتصف
             ),
           ),
         ),

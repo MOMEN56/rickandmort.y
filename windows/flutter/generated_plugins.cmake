@@ -3,7 +3,8 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  connectivity_plus
+  connectivity_plus_windows
+  network_info_plus_windows
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

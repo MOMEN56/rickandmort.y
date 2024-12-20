@@ -75,8 +75,8 @@ class CharacterDetailsScreen extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 return Container(
-                  margin: EdgeInsets.fromLTRB(14, 14, 14, 0),
-                  padding: EdgeInsets.all(8),
+                  margin: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
